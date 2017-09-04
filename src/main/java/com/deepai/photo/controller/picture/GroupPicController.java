@@ -2231,7 +2231,7 @@ public class GroupPicController {
     public Object signPic(HttpServletRequest request,
             HttpServletResponse response, Integer groupId,Integer type) {
         ResponseMessage result = new ResponseMessage();
-//        CpUser user = SessionUtils.getUser(request);
+        CpUser user = SessionUtils.getUser(request);
 
         CommonValidation.checkParamBlank(groupId + "", "稿件id");
         
@@ -2262,7 +2262,7 @@ public class GroupPicController {
                             sQbPath + File.separator + fileName);
 
                     //写入xml文件
-                    Document doc = XMLUtils.createDoc(group,pic,type);
+                    Document doc = XMLUtils.createDoc(group,pic,type,user);
                     XMLUtils.writeXML(doc, sQbPath+fileName.substring(0, fileName.lastIndexOf("."))+".xml");
                 }
             }

@@ -14,6 +14,8 @@ import org.dom4j.io.OutputFormat;
 
 import com.deepai.photo.bean.CpPicGroup;
 import com.deepai.photo.bean.CpPicture;
+import com.deepai.photo.bean.CpUser;
+import com.deepai.photo.common.util.date.DateUtils;
 
 /**
  * Title: TRS 内容协作平台（TRS WCM） <BR>
@@ -26,6 +28,8 @@ import com.deepai.photo.bean.CpPicture;
  * @version 1.0
  */
 public class XMLUtils {
+  private static org.apache.log4j.Logger logger = org.apache.log4j.Logger
+        .getLogger(XMLUtils.class);
 
     /**
      * 生成xml文件
@@ -35,27 +39,41 @@ public class XMLUtils {
      * @param group
      * @param pic
      * @param type 类型0:新华社图片；1:报社图片
+     * @param user 
      * @return
      */
     public static Document createDoc(CpPicGroup group, CpPicture pic,
-            Integer type) {
+            Integer type, CpUser user) {
         Document document = DocumentHelper.createDocument();
         document.setXMLEncoding("GB2312");
         Element root = DocumentHelper.createElement("News");
 
         Element eAuthor = DocumentHelper.createElement("Author");
-        eAuthor.setText("测试1");
+        eAuthor.setText(group.getAuthor());
 
         Element eTitle = DocumentHelper.createElement("Title");
-        eTitle.setText("测试2");
+        eTitle.setText(group.getTitle());
         Element eType = DocumentHelper.createElement("Type");
-        eType.setText("3");
+        if(type==1){
+            eType.setText("报社图片");
+        }else{
+            eType.setText("新华社图片");
+        }
+        
         Element eTime = DocumentHelper.createElement("Time");
-        eTime.setText("4");
+        String sNow = "";
+        try {
+            sNow = DateUtils.getNowPlusTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+        }
+        eTime.setText(sNow);
+        
         Element eBody = DocumentHelper.createElement("Body");
-        eBody.setText("5");
+        eBody.setText(pic.getMemo());
         Element eSender = DocumentHelper.createElement("Sender");
-        eSender.setText("6");
+        eSender.setText(user.getUserName());
 
         root.add(eAuthor);
         root.add(eTime);
