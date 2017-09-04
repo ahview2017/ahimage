@@ -2267,7 +2267,7 @@ public class GroupPicController {
                 }
             }
             
-//            签过了更新状态
+            // 签过了更新状态
             cpPicGroupMapper.updateByGroupId(groupId);
             
             result.setCode(CommonConstant.SUCCESSCODE);
