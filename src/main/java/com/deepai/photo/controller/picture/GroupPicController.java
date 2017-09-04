@@ -2234,6 +2234,7 @@ public class GroupPicController {
         CpUser user = SessionUtils.getUser(request);
 
         CommonValidation.checkParamBlank(groupId + "", "稿件id");
+        CommonValidation.checkParamBlank(type + "", "签报类型");
         
         try {
             CpPicGroup group = aboutPictureMapper.selectGroupPics(groupId);

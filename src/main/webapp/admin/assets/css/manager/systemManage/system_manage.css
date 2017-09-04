@@ -591,6 +591,17 @@
     border: 1px solid #3399cc;
     background-color: #FFF;
 }
+.common-modal-style2{
+    position: absolute;
+    z-index: 999;
+    /*margin: auto;*/
+    left: 20%;
+    right: 20%;
+    top: 15%;
+    /*bottom: 0;*/
+    border: 1px solid #3399cc;
+    background-color: #FFF;
+}
 .send-model-style{
     width: 560px;
     border-radius: 16px;
