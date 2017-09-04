@@ -182,7 +182,8 @@ public class GetPicture {
 			limit=limit==null?5:limit;
 			param.put("limit", limit);
 			List<Map<String,Object>> list=clientPictureMapper.selectClientGroup(param);
-			if(sginId==23||sginId==133||sginId==513){
+			//add by mei.xianhu@20170904
+			if(sginId==23||sginId==133||sginId==513||sginId==3067){
 				for (Map<String,Object> map:list) {
 					if(map.containsKey("FILENAME")){
 						map.put("wmPath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getWMPathByName(map.get("FILENAME").toString(),request));
