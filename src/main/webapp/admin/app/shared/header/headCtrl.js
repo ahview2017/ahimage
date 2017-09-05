@@ -175,7 +175,7 @@ adminModule.controller('headCtrl',function($translate, $scope, $cookies, req, md
         //系统管理数组
         var sysManageArr = [206,30, 103,334,345,377, 9, 6, 50, 46 , 56, 63 , 36 ,76,41,34,65,89,61,85,210,'子库管理',256,399];
         //投稿功能数组
-        var contributeFunArr = [110,113,121,'稿费统计','使用指南'];
+        var contributeFunArr = [110,113,121,413,'稿费统计','使用指南'];
         //管理功能数组
         var manageFunArr = [206,30, 103, 9, 6, 50, 46 , 56, 63 , 36 ,76,41,34,65,89,61,85,210,'子库管理',256];
         //销售管理数组
@@ -187,7 +187,7 @@ adminModule.controller('headCtrl',function($translate, $scope, $cookies, req, md
         var photographerM = [110,113,121,'稿费统计',266,'使用指南',65,270];
         //数据统计数组
         var dataStatisticsArr = [313,397,398,399,402,403,404,405,406,407,408,'图片下载统计','用户下载统计','签稿统计','稿酬统计','用户信息统计'];
-        console.log(accessList);
+        console.log("accessList:"+accessList);
         for(var i = 0; i < accessList.length; i++){
             //系统管理
             if((sysManageArr.indexOf(accessList[i].ID) != -1)){
