@@ -89,6 +89,14 @@ public  class CommonConstant {
 	public static final String SMALL= "small";
 	public static final String WATER= "watermark";
 	public static final String WATERMEDIUM= "watermarkedmedium";
+	
+	// add by liu.jinfeng@2017年9月6日 上午10:46:00 
+    public static final String SMALL400= "small400";//小图400
+    public static final String WATERMEDIUM1200= "watermarkedmedium1200";//水印1200
+    public static final String MEDIUM= "medium";//中图800
+    public static final String MEDIUM1200= "medium1200";//中图1200
+    public static final String BIG= "big";//大图
+    
 	public static  String SMALLHTTPPath;
 	@Value("${ipAdd}")
 	public  void setIpAdd(String ipAdd) {

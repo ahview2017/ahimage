@@ -701,8 +701,6 @@ public class PictureService {
         param.put("picType", 4);
         // 查询水印中图是否已存在
         String wmM = aboutPictureMapper.selectPicPathByType(param);
-        // logger.info("wmM>>>>>>>>>>>>>>>>>"+wmM+"<---->"+picId);
-        // logger.info("mediumAllPath>>>>>>>>>>>>>>>>>"+mediumAllPath+"<---->"+picId);
         if (wmM == null) {
             String waterPic = sysConfigService.getDbSysConfig(
                     SysConfigConstant.DEFAULT_WATERMARK_PIC, siteId);
@@ -714,8 +712,71 @@ public class PictureService {
             String wmAllPath = initFullPathByOrder(watermarkedmedium, fileName);
             ImageAnalyseUtil.waterMarkPic(wmAllPath, mediumAllPath, waterPic,
                     position, true);
-            // logger.info("wmAllPath："+wmAllPath);
             addPicAllPath(wmAllPath, 4, picId);
+        }
+        
+        // ch add by liu.jinfeng@2017年9月5日 下午9:05:35
+        // 中图 1200
+        param.put("picType", 8);
+        // 查询中图是否已存在
+        String medium1200 = aboutPictureMapper.selectPicPathByType(param);
+        String mediumPath1200 = sysConfigService
+                .getDbSysConfig(SysConfigConstant.MEDIUM_PIC_PATH1200, siteId);
+        String mediumAllPath1200 = initFullPathByOrder(mediumPath1200, fileName);
+        if (medium1200 == null) {
+            int mediumSize1200 = Integer
+                    .valueOf(sysConfigService.getDbSysConfig(
+                            SysConfigConstant.MEDIUM_PIC_SIZE1200, siteId));
+            if (mediumSize1200 <= picSize) {
+                ImageAnalyseUtil.gmAlterImg(mediumSize1200, Path,
+                        initFullPathByOrder(mediumPath1200, fileName), width,
+                        height, synFlag);
+            } else {
+                ImgFileUtils.makeDirectory(mediumAllPath1200);
+                ImgFileUtils.copyFile(Path, mediumAllPath1200);
+            }
+            addPicAllPath(mediumAllPath1200, 8, picId);
+        }
+        
+        // 水印中图 1200
+        // Thread.sleep(2000);
+        param.put("picType", 9);
+        // 查询水印中图是否已存在
+        String wmM1200 = aboutPictureMapper.selectPicPathByType(param);
+        if (wmM1200 == null) {
+            String waterPic = sysConfigService.getDbSysConfig(
+                    SysConfigConstant.DEFAULT_WATERMARK_PIC, siteId);
+            String position = sysConfigService.getDbSysConfig(
+                    SysConfigConstant.UPLOAD_WATER_POSITION, siteId);
+            String watermarkedmedium1200 = sysConfigService.getDbSysConfig(
+                    SysConfigConstant.WATERMARK_PIC_PATH1200, siteId);
+            String wmAllPath1200 = initFullPathByOrder(watermarkedmedium1200, fileName);
+            
+            ImageAnalyseUtil.waterMarkPic(wmAllPath1200, mediumAllPath1200, waterPic,
+                    position, true);
+            addPicAllPath(wmAllPath1200, 9, picId);
+        }
+        
+     // 小图 400
+        param.put("picType", 10);
+        // 查询400小图是否已存在
+        String small400 = aboutPictureMapper.selectPicPathByType(param);
+        String smallPath400 = sysConfigService
+                .getDbSysConfig(SysConfigConstant.SMALL_PIC_PATH400, siteId);
+        String smallAllPath400 = initFullPathByOrder(smallPath400, fileName);
+        if (small400 == null) {
+            int smallSize400 = Integer
+                    .valueOf(sysConfigService.getDbSysConfig(
+                            SysConfigConstant.SMALL_PIC_SIZE400, siteId));
+            if (smallSize400 <= picSize) {
+                ImageAnalyseUtil.gmAlterImg(smallSize400, Path,
+                        initFullPathByOrder(smallPath400, fileName), width,
+                        height, synFlag);
+            } else {
+                ImgFileUtils.makeDirectory(smallAllPath400);
+                ImgFileUtils.copyFile(Path, smallAllPath400);
+            }
+            addPicAllPath(smallAllPath400, 10, picId);
         }
     }
 

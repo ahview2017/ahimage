@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,10 +33,13 @@ import com.deepai.photo.common.util.SessionUtils;
 import com.deepai.photo.common.util.encrypt.Coder;
 import com.deepai.photo.common.util.encrypt.MD5Util2;
 import com.deepai.photo.common.validation.CommonValidation;
+import com.deepai.photo.controller.util.PhoneMSGUtils;
 import com.deepai.photo.mapper.CpUserMapper;
 import com.deepai.photo.service.admin.SysConfigService;
 import com.deepai.photo.service.admin.UserRoleRightService;
 import com.deepai.photo.service.phonemsg.PhoneMSGService;
+
+import net.sf.json.JSONObject;
 
 /**
  * * @author huqiankai: *
@@ -54,6 +58,8 @@ public class PhoneMSGController {
 	private CpUserMapper cpUserMapper;
 	@Autowired
 	private RedisClientTemplate redisClientTemplate;
+	@Autowired
+	private PhoneMSGUtils phoneMSGUtils;
 	
 	private String result2 = "false";
 	private int [] uid;
@@ -768,6 +774,67 @@ public class PhoneMSGController {
 			result.setMsg(CommonConstant.EXCEPTIONMSG);
 		}
 		return result;
+	}
+	
+	/**
+	 * 注册发送短信验证码
+	 * @Description: TODO <BR>
+	 * @author liu.jinfeng
+	 * @date 2017年9月6日 下午9:41:37
+	 * @param request
+	 * @param phoneNum 手机号码
+	 * @return
+	 */
+	@ResponseBody
+    @RequestMapping("/sendMsgCode")
+    @SkipLoginCheck
+    @SkipAuthCheck
+	public Object sendMsgCode(HttpServletRequest request,String phoneNum){
+	    ResponseMessage result = new ResponseMessage();
+	    
+        CommonValidation.checkParamBlank(phoneNum, "手机号");
+        //正则验证手机号码是否合法
+        final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+        if(!Pattern.matches(REGEX_MOBILE, phoneNum)){
+            result.setCode(CommonConstant.EXCEPTIONCODE);
+            result.setMsg(CommonConstant.EXCEPTIONMSG);
+            return result;
+        }
+        
+//        log.info("========"+redisClientTemplate.get("PHONE"+phoneNum));
+        if(redisClientTemplate.get("PHONE"+phoneNum)!=null){
+            result.setCode(CommonConstant.EXCEPTIONCODE);
+            result.setMsg(CommonConstant.EXCEPTIONMSG);
+            return result;
+        }
+        
+        JSONObject resultObj = null;
+        try {
+            resultObj = phoneMSGUtils.sendMsg(phoneNum, PhoneMSGUtils.TYPE_SEND_CODE);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.setCode(CommonConstant.EXCEPTIONCODE);
+            result.setMsg("短信发送失败");
+            return result;
+        }
+        if(null ==resultObj||resultObj.getString("code").equals("0")){
+            result.setCode(CommonConstant.EXCEPTIONCODE);
+            result.setMsg("短信发送失败");
+            return result;
+        }
+
+        //验证码有效期 3分钟
+        String vilidata = resultObj.getString("msg");
+        redisClientTemplate.set("PHONE"+phoneNum+vilidata, vilidata+"");
+        redisClientTemplate.expire("PHONE"+phoneNum+vilidata, 60*3);
+        //保存手机号，防止频繁调用接口
+        redisClientTemplate.set("PHONE"+phoneNum, vilidata+"");
+        redisClientTemplate.expire("PHONE"+phoneNum, 60);
+        
+//        log.info("PHONE"+phoneNum+vilidata+"==="+redisClientTemplate.get("PHONE"+phoneNum+vilidata));
+        result.setCode(CommonConstant.SUCCESSCODE);
+        result.setMsg(CommonConstant.SUCCESSSTRING);
+	    return result;
 	}
 	
 }

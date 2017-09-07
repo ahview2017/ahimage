@@ -153,11 +153,11 @@
   <!-- 根据图片id和type查图片全路径 -->
   <select id="selectPicPathByType" parameterType="map" resultType="String">
   	SELECT p.ALL_PATH from cp_pic_allpath p
-  		<if test="picType!=null and picType==5">
+  		<if test="picType!=null and picType==5 ">
   			LEFT JOIN cp_water_mark_picture w on p.TRAGET_ID=w.ID
 			WHERE p.PIC_TYPE=5 and  w.ID=#{tragetId}
   		</if>
-  		<if test="picType!=null and picType &gt;=0 and picType &lt;=4">
+  		<if test="picType!=null and ((picType &gt;=0 and picType &lt;=4) or (picType &gt;=8 and picType &lt;=10))">
   			LEFT JOIN cp_picture w on p.TRAGET_ID=w.ID
 			WHERE p.PIC_TYPE=#{picType} and  w.ID=#{tragetId}
   		</if>
@@ -165,6 +165,7 @@
   			LEFT JOIN cp_user_idpic w on p.TRAGET_ID=w.ID
 			WHERE p.PIC_TYPE=6 and  w.ID=#{tragetId}
   		</if>
+  		
   		ORDER BY p.ID DESC LIMIT 1
   </select>
   <!-- 获取系统默认水印图片 -->

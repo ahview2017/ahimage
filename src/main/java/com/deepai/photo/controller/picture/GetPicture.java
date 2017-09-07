@@ -173,43 +173,60 @@ public class GetPicture {
 	@ResponseBody
 	@RequestMapping("/getClientGroups")
 	@SkipLoginCheck
-	public Object getClientGroups(HttpServletRequest request,Integer sginId,Integer limit){
-		ResponseMessage result=new ResponseMessage();
-		try {
-			CommonValidation.checkParamBlank(sginId+"", "签发分类id");
-			Map<String,Object> param=new HashMap<String, Object>();
-			param.put("sginId", sginId);
-			limit=limit==null?5:limit;
-			param.put("limit", limit);
-			List<Map<String,Object>> list=clientPictureMapper.selectClientGroup(param);
-			//add by mei.xianhu@20170904
-			if(sginId==23||sginId==133||sginId==513||sginId==3067){
-				for (Map<String,Object> map:list) {
-					if(map.containsKey("FILENAME")){
-						map.put("wmPath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getWMPathByName(map.get("FILENAME").toString(),request));
-					}
-				}
-			}else{
-				for (Map<String,Object> map:list) {
-					if(map.containsKey("FILENAME")){
-						map.put("samllPath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getSamllPathByName(map.get("FILENAME").toString(),request));
-					}
-				}
-			}
-			result.setCode(CommonConstant.SUCCESSCODE);
-			result.setMsg(CommonConstant.SUCCESSSTRING);
-			result.setData(list);
-		} catch (InvalidHttpArgumentException e) {
-			result.setCode(e.getCode());
-			result.setMsg(e.getMsg());
-		}catch(Exception e1){
-			e1.printStackTrace();
-			logger.error("查询clint首页稿件，"+e1.getMessage());
-			result.setCode(CommonConstant.EXCEPTIONCODE);
-			result.setMsg(CommonConstant.EXCEPTIONMSG);
-		}
-		return result;
-	}
+	public Object getClientGroups(HttpServletRequest request,Integer sginId,Integer limit,Integer picType,Integer size){
+        ResponseMessage result=new ResponseMessage();
+        try {
+            CommonValidation.checkParamBlank(sginId+"", "签发分类id");
+            Map<String,Object> param=new HashMap<String, Object>();
+            param.put("sginId", sginId);
+            limit=limit==null?5:limit;
+            //设置默认值
+            picType = picType==null?0:1;
+            size = size==null?1:size;
+            
+            param.put("limit", limit);
+            List<Map<String,Object>> list=clientPictureMapper.selectClientGroup(param);
+            if(picType == 1){
+                for (Map<String,Object> map:list) {
+                    if(map.containsKey("FILENAME")){
+                        map.put("FilePath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getWMPathByNameAndSize(map.get("FILENAME").toString(),request,size));
+                    }
+                }
+            }else{
+                for (Map<String,Object> map:list) {
+                    if(map.containsKey("FILENAME")){
+                        map.put("FilePath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getPathByNameAndSize(map.get("FILENAME").toString(),request,size));
+                    }
+                }
+            }
+            
+            /* if(sginId==23||sginId==133||sginId==513){
+                for (Map<String,Object> map:list) {
+                    if(map.containsKey("FILENAME")){
+                        map.put("wmPath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getWMPathByName(map.get("FILENAME").toString(),request));
+                    }
+                }
+            }else{
+                for (Map<String,Object> map:list) {
+                    if(map.containsKey("FILENAME")){
+                        map.put("samllPath", CommonConstant.SMALLHTTPPath+ImgFileUtils.getSamllPathByName(map.get("FILENAME").toString(),request));
+                    }
+                }
+            }*/
+            result.setCode(CommonConstant.SUCCESSCODE);
+            result.setMsg(CommonConstant.SUCCESSSTRING);
+            result.setData(list);
+        } catch (InvalidHttpArgumentException e) {
+            result.setCode(e.getCode());
+            result.setMsg(e.getMsg());
+        }catch(Exception e1){
+            e1.printStackTrace();
+            logger.error("查询clint首页稿件，"+e1.getMessage());
+            result.setCode(CommonConstant.EXCEPTIONCODE);
+            result.setMsg(CommonConstant.EXCEPTIONMSG);
+        }
+        return result;
+    }
 	/**
 	 * 获取客户端首页稿件
 	 * @param request

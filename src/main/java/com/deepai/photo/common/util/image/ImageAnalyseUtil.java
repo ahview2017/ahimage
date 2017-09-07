@@ -2711,6 +2711,12 @@ public class ImageAnalyseUtil {
             if (synFlag == null || synFlag) {
                 convert.setAsyncMode(true);
             }
+
+            // add by liu.jinfeng@20170903
+            convert.setSearchPath(
+                    "/usr/local/Cellar/graphicsmagick/1.3.26_1/bin");
+            // convert.setSearchPath("/usr/local/graphicsmagick/bin");
+
             convert.run(op);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -2903,5 +2909,12 @@ public class ImageAnalyseUtil {
         }
 
         return image;
+    }
+    public static void main(String[] args) throws IOException, InterruptedException, IM4JavaException {
+        String waterPic = "/Users/liujinfeng/Documents/trsphoto/zh/watermarkedmedium/2017/20170906/20170906001132a.jpg";
+        String srcPic = "/Users/liujinfeng/Documents/trsphoto/zh/medium/2017/20170906/20170906001132a.jpg";
+        String waterMarkerPic = "/Users/liujinfeng/Documents/trsphoto/watermark/20170901085532_1504227332642_p.png";
+        String place = "Center";
+        ImageAnalyseUtil.waterMarkPic(waterPic, srcPic, waterMarkerPic, place, true);
     }
 }

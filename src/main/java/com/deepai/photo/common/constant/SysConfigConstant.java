@@ -46,6 +46,15 @@ public class SysConfigConstant {
 	public	static String 	MEDIUM_PIC_SIZE="MEDIUM_PIC_SIZE"	;//	800	中图尺寸限制
 	public	static String 	WATERMARKEDMEDIUM_PIC_SIZE="WATERMARKEDMEDIUM_PIC_SIZE"	;//	800	水印中图尺寸限制
 	public	static String 	SMALL_PIC_SIZE="SMALL_PIC_SIZE"	;//	150	小图尺寸限制
+   
+	// add by liu.jinfeng@2017年9月5日 下午9:03:52
+    public static String SMALL_PIC_SIZE400 = "SMALL_PIC_SIZE400";// 400小图尺寸限制
+    public static String SMALL_PIC_PATH400 = "SMALL_PIC_PATH400";// 400小图位置
+    public static String WATERMARK_PIC_PATH1200 = "WATERMARK_PIC_PATH1200";// 1200
+    public static String MEDIUM_PIC_SIZE1200 = "MEDIUM_PIC_SIZE1200";// D:/trsphoto/medium/
+    public static String MEDIUM_PIC_PATH1200 = "MEDIUM_PIC_PATH1200";// D:/trsphoto/medium/
+                                                                     // 中图1200路径
+	
 	public	static String 	COVER_PIC_PATH="COVER_PIC_PATH"	;//	D:/trsphoto/cover/	首页封面图片路径
 	public	static String 	DEFAULT_COVER_PICTURE="DEFAULT_COVER_PICTURE"	;//	cover.jpg	默认首页图片
 	public	static String 	SMALL_PIC_PATH_OUT="SMALL_PIC_PATH_OUT"	;//	D:\bjrb_trsphoto\small\	外网小图路径
@@ -82,7 +91,9 @@ public class SysConfigConstant {
 	public	static String 	PICTUREMINLENGTH="PICTUREMINLENGTH";//稿件图片上传大小（文件大小）最小限制（图片文件大小不能低于此值），单位M，1048576字节=1M
 	public static Map<String,String> config;
 	
-	public static String   QIANBAO_FILE_PATH="QIANBAO_FILE_PATH" ;// D:/trsphoto/big/    大图路径
+	public static String   QIANBAO_FILE_PATH="QIANBAO_FILE_PATH" ;// D:/trsphoto/big/    签报图路径
+	 /** 发送短信模版 */
+    public static final String MSG_SEND_CODE = "MSG_SEND";
 	
 	
 }

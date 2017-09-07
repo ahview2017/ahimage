@@ -82,6 +82,7 @@ public class OnloadStart extends HttpServlet{
 			config.put("PICTUREMAXLENGTH","8192");//稿件图片上传大小（文件大小）最大限制（图片文件大小不能高于此值），单位KB 
 			config.put("PICTUREMINLENGTH","0");//稿件图片上传大小（文件大小）最小限制（图片文件大小不能低于此值），单位KB 
 			config.put("TEMP_PIC_PATH","D:/trsphoto/temp/");//D:/trsphoto/temp/ 系统临时路径
+//			config.put("MSG_SEND", "MSG_SEND");//发送短信验证码内容配置
 			//TODO 其他配置项
 			SysConfigConstant.config=config;
 		} catch (Exception e) {
