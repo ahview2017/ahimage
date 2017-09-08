@@ -491,6 +491,10 @@ angular.module('admin.filter', [])
                 case 18:
                     result = "还原";
                     break;
+                case 19:
+                    result = "签报";
+                    break;
+                    
             }
             return result;
         }

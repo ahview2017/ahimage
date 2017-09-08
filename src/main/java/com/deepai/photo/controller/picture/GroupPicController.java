@@ -2287,6 +2287,9 @@ public class GroupPicController {
             // 签过了更新状态
             cpPicGroupMapper.updateByGroupId(groupId);
             
+            //记录流程日志
+            flowService.addFlowLog(groupId, 19, "签报", null, user);
+            
             result.setCode(CommonConstant.SUCCESSCODE);
             result.setMsg(CommonConstant.SUCCESSSTRING);
         } catch (Exception e) {
@@ -2300,6 +2303,16 @@ public class GroupPicController {
 
     }
     
+    /**
+     * 获取已处理稿件列表
+     * @Description: TODO <BR>
+     * @author liu.jinfeng
+     * @date 2017年9月8日 上午10:14:48
+     * @param request
+     * @param response
+     * @param query
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/getGroupPicsInDeal")
     public Object getGroupPicsInDeal(HttpServletRequest request,
