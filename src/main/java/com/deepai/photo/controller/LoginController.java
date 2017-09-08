@@ -148,6 +148,7 @@ public class LoginController {
      *            用户名
      * @param password
      *            密码
+     * @param type 区分前后台登录 1 前台 ，0 后台
      * @return
      */
     @ResponseBody
@@ -155,13 +156,24 @@ public class LoginController {
     @SkipLoginCheck
     @SkipAuthCheck
     public Object doLogin(HttpServletRequest request, String userName,
-            String password, String vilidate, HttpServletResponse response) {
+            String password, String vilidate, HttpServletResponse response,Integer type) {
         CommonValidation.checkParamBlank(userName, "用户名");
         CommonValidation.checkParamBlank(password, "密码");
         CommonValidation.checkParamBlank(vilidate, "验证码");
         ResponseMessage res = new ResponseMessage();
         try {
-            String scode = (String) request.getSession().getAttribute("scode");
+            String scode = "";
+            if (type == 0) {
+                scode = (String) request.getSession().getAttribute("scode");
+            } else if (type == 1) {
+                scode = redisClientTemplate
+                        .get("USERNAME" + userName + vilidate);
+                if(scode==null){
+                    res.setCode(CommonConstant.EXCEPTIONCODE);
+                    res.setMsg(CommonConstant.EXCEPTIONMSG);
+                    return res;
+                }
+            }
             String lowerCase = scode.toLowerCase();
             if (lowerCase.equalsIgnoreCase(vilidate)
                     || scode.equalsIgnoreCase(vilidate)) {
@@ -184,7 +196,7 @@ public class LoginController {
                             long b = System.currentTimeMillis();
                             if (b - a < Integer.parseInt(lockTime) * 60000) {
                                 res.setCode(CommonConstant.FAILURECODE);
-                                res.setMsg("该用户暂时无法登陆");
+                                res.setMsg("该用户暂时无法登录");
                                 logLogin(request, user.getUserName(), res,
                                         user.getPassword());
                                 return res;
