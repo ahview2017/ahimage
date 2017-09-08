@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,22 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deepai.photo.bean.CpColumn;
 import com.deepai.photo.bean.CpDutyUser;
 import com.deepai.photo.bean.CpDutyUserExample;
-import com.deepai.photo.bean.CpLanmu;
-import com.deepai.photo.bean.CpLanmuPicture;
-import com.deepai.photo.bean.CpPicAllpath;
-import com.deepai.photo.bean.CpPicAllpathExample;
 import com.deepai.photo.bean.CpPicGroup;
 import com.deepai.photo.bean.CpPicGroupAssign;
 import com.deepai.photo.bean.CpPicGroupCategory;
 import com.deepai.photo.bean.CpPicGroupCategoryExample;
-import com.deepai.photo.bean.CpPicGroupColumn;
 import com.deepai.photo.bean.CpPicGroupExample;
 import com.deepai.photo.bean.CpPicGroupProcess;
 import com.deepai.photo.bean.CpPicture;
-import com.deepai.photo.bean.CpPictureDownloadrecord;
 import com.deepai.photo.bean.CpPictureExample;
-import com.deepai.photo.bean.CpPicturePrice;
-import com.deepai.photo.bean.CpPicturePriceExample;
 import com.deepai.photo.bean.CpProofread;
 import com.deepai.photo.bean.CpUser;
 import com.deepai.photo.common.StringUtil;
@@ -42,7 +32,6 @@ import com.deepai.photo.common.exception.InvalidHttpArgumentException;
 import com.deepai.photo.common.redis.RedisClientTemplate;
 import com.deepai.photo.common.util.date.DateUtils;
 import com.deepai.photo.common.util.json.GsonUtil;
-import com.deepai.photo.common.util.json.JSONUtils;
 import com.deepai.photo.common.util.json.JsonUtil;
 import com.deepai.photo.common.validation.CommonValidation;
 import com.deepai.photo.mapper.AboutPictureMapper;
@@ -1355,4 +1344,46 @@ public class FlowService {
 		}
 		return res==null?null:res.toString();
 	}
+
+    /**
+     * @Description: 签发时校验栏目是否签发过 <BR>
+     * @author liu.jinfeng
+     * @date 2017年9月7日 下午9:26:57
+     * @param cates
+     * @return
+     */
+    public String checkSignClnum(Integer groupId,
+            List<Map<String, Object>> cates) {
+        logger.info("============"+cates.size());
+        StringBuffer sb = new StringBuffer(50);
+        StringBuffer sbIds = new StringBuffer(",");
+        // 依次查询栏目是否签发过
+        for (Map<String, Object> m : cates) {
+            logger.info("=="+m.toString());
+            if (m.get("type").toString().equals("0")) {// 签发
+                String sid = String.valueOf(m.get("signId"));
+                Integer signId = Integer.parseInt(sid.substring(0, sid.lastIndexOf(".")));
+                if(sbIds.toString().indexOf(","+signId+",")>-1){
+                    continue;
+                }
+                sbIds.append(signId).append(",");
+                
+                CpPicGroupCategoryExample e = new CpPicGroupCategoryExample();
+                e.createCriteria().andGroupIdEqualTo(groupId).andTypeEqualTo(1)
+                        .andCategoryIdEqualTo(signId);
+                int nCount = cpPicGroupCategoryMapper.countByExample(e);
+                if (nCount > 0) {// 表示这个栏目之前已经签过
+                    // sb.append(signId).append(",");
+                    CpColumn colume = columnMapper.selectBykey(signId);
+                    sb.append(colume.getName()).append(",");
+                }
+            }
+        }
+
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 1);
+            return sb.toString();
+        }
+        return null;
+    }
 }
