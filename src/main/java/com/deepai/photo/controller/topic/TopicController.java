@@ -325,7 +325,7 @@ public class TopicController {
 		String url = request.getServletPath();
 		String id = request.getParameter("topicId");
 		url = request.getRequestURL().toString();
-		url = url.substring(0, url.indexOf("cnsphoto"));
+		url = url.substring(0, url.indexOf("photo"));
 		url = url+"#/special/"+id;
 		return new ModelAndView(new RedirectView(url));
 	}

@@ -7,4 +7,4 @@ private static String ip="localhost";//全文检索数据库ip
 private static String prot="8888";//端口
 private static String user="system";//用户名
 private static String password="manager";//密码
-private static String tableName="cnsphoto";//检索的表
+private static String tableName="photo";//检索的表

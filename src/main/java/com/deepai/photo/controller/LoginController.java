@@ -899,9 +899,9 @@ public class LoginController {
                             String.format("用户名为【%s】的用户,密码重置成功！", userName));
                     CpEmail email = new CpEmail();
                     try {
-                        String title = "[cnsphoto]帐户找回密码通知！";
+                        String title = "[photo]帐户找回密码通知！";
                         String content = "亲爱的用户" + userName
-                                + "：您的登录密码重新设置成功，如非本人操作请联系[cnsphoto]管理员";
+                                + "：您的登录密码重新设置成功，如非本人操作请联系[photo]管理员";
 
                         // 添加邮件信息
                         email.setEmailReciver(userName);

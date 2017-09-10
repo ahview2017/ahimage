@@ -43,6 +43,8 @@ clientModule.controller('headerCtrl', function ($scope, $cookies, req, md5, $sta
                 $state.go('root.login');
                 $rootScope.user_online = false;
                 $cookies.remove('client_uname');
+                $cookies.put('client_uname','');
+                //layer.alert("=="+$cookies.get('client_uname'));
                 initSetting();
                 removeAllCookies();
             } else {
@@ -103,6 +105,11 @@ clientModule.controller('headerCtrl', function ($scope, $cookies, req, md5, $sta
         var fullTextUrl = $state.href('root.fullText', {searchAllName: vm.searchAllName,randomNum: vm.randomNum});
         window.open(fullTextUrl,'_blank');
     };
+    //登录
+    vm.login = function(){
+    	$("#client_view_container").css({"width":"1100px","height":"100%","background":"#000","filter":"alpha(opacity=50","opacity":"0.5","display":"none","z-index":" 99","margin":" 0 auto"});
+    	$("#login").show();
+    }
 
     /**
      * 获取广告位第一位图片

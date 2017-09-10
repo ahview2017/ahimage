@@ -19,7 +19,7 @@ adminModule.controller('loginCtrl', function ($scope, $cookies, req, md5, $state
         //从cookie里取得存储的用户上次离开的页面地址
         vm.cookie_latestHash = $cookies.get('latest_hash');
 
-        vm.validCodeImg ='/cnsphoto/yanzheng.do?tm='+Math.random();
+        vm.validCodeImg ='/photo/yanzheng.do?tm='+Math.random();
     }
 
     init();
@@ -41,7 +41,9 @@ adminModule.controller('loginCtrl', function ($scope, $cookies, req, md5, $state
     }
     //找回密码
     vm.goFindPwd = function(){
-        $window.location.href='/#/forgetPassword';
+//        $window.location.href='/#/forgetPassword';
+    	$window.location.href='/photo/index.html#/forgetPassword';
+//    	$state.go('forgetPassword');
     }
     // 客户端登录
     vm.loginIn = function () {
@@ -115,8 +117,8 @@ adminModule.controller('loginCtrl', function ($scope, $cookies, req, md5, $state
 
     //改变验证码图片
     vm.changeValidCodeImg = function(){
-        vm.validCodeImg ='/cnsphoto/yanzheng.do?tm='+Math.random();
-        // vm.validCodeImg ='http://192.168.180.124/cnsphoto/yanzheng.do?tm='+Math.random();
+        vm.validCodeImg ='/photo/yanzheng.do?tm='+Math.random();
+        // vm.validCodeImg ='http://192.168.180.124/photo/yanzheng.do?tm='+Math.random();
 
     }
 

@@ -398,9 +398,9 @@ public class MailController {
 			String pwd_md5 = Coder.reverse(Coder.decryptBASE64(pwd_db));// md5密码
 			
 			if(pwd_md5.equals(password)){
-				String title = "[cnsphoto]帐户注册通知！";
+				String title = "[photo]帐户注册通知！";
 				String content = "亲爱的用户"+userName+"：您好！ "
-						+"感谢您注册cnsphoto的账户，您的注册手机号为："+cpUser.getTelBind();
+						+"感谢您注册photo的账户，您的注册手机号为："+cpUser.getTelBind();
 				
 				if(roleId != null&&roleId == 3){
 					//摄影师

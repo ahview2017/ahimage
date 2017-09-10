@@ -1379,8 +1379,8 @@ public class GroupPicController {
 			CpUser user=SessionUtils.getUser(request);
 			gType=gType==null?0:gType;//默认为0
 			/*String url=request.getRequestURL().toString();//url
-			String cnsphoto=request.getContextPath();
-			String path=url.substring(0, url.indexOf(cnsphoto));*/
+			String photo=request.getContextPath();
+			String path=url.substring(0, url.indexOf(photo));*/
 			Map<String,Object> param=new HashMap<String, Object>();
 			int siteId=SessionUtils.getSiteId(request);
 			if(siteId!=1){

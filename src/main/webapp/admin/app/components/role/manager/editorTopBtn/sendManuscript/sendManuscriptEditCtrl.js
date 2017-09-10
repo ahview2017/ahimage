@@ -487,7 +487,7 @@ adminModule.controller('mSendManuscriptEditCtrl', function($scope, $cookies, req
         $.ajax({
             type: "POST",
             data: formdata,
-            url: "/cnsphoto/groupPicCtro/upPic.do" + '?time=' + new Date().getTime(),
+            url: "/photo/groupPicCtro/upPic.do" + '?time=' + new Date().getTime(),
             cache: false,
             contentType: false,     //必须false才会自动加上正确的Content-Type
             processData: false,     //必须false才会避开jQuery对formdata的默认处理
