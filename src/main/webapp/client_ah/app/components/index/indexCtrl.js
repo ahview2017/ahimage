@@ -59,6 +59,8 @@ clientModule.controller('indexCtrl', function ($scope, $cookies, req, md5, $stat
         initSetting();
         //req_getClientPicture();
         //getClientGroupPics();
+        //初始化地区下拉列表
+        setup();
     }
 
     init();

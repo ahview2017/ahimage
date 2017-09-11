@@ -470,7 +470,7 @@ dsy.add("0_30_0",["城口县","大足县","垫江县","丰都县","奉节县","�
 var s=["province","city","county"];
 var opt0 = ["省份","地级市","地区"];
 function setup()
-{
+{console.log("=======");
 for(i=0;i<s.length-1;i++)
   document.getElementById(s[i]).onchange=new Function("change("+(i+1)+")");
 change(0);
