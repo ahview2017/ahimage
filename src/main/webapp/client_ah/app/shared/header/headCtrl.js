@@ -456,6 +456,7 @@ clientModule.controller('headerCtrl', function($scope, $cookies, req, md5,
         console.log(reqData);
         req.post('login/registerOne.do',reqData).success(function(resp){
             if(resp.code == '211'){
+            	$('#register_form')[0].reset();//清空表单
             	//关闭窗口
             	$("#gray").hide();
         		$(".register_box").hide();

@@ -98,8 +98,8 @@ public class PhoneMSGController {
             String pwd_md5 = Coder.reverse(Coder.decryptBASE64(pwd_db));// md5密码
 
             if (pwd_md5.equals(password)) {
-                String content = "[photo]帐户注册通知！亲爱的用户" + userName + "：您好！ "
-                        + "感谢您注册photo的账户，您的注册邮箱号为：" + cpUser.getEmailBind();
+                String content = "安徽视觉网帐户注册通知！亲爱的用户" + userName + "：您好！ "
+                        + "感谢您注册安徽视觉网的账户，您的注册邮箱号为：" + cpUser.getEmailBind();
 
                 if (roleId != null && roleId == 3) {
                     // 摄影师
