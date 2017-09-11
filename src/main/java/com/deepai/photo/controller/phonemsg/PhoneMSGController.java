@@ -110,9 +110,9 @@ public class PhoneMSGController {
                 cpPhoneMsg.setSender(userName);
                 cpPhoneMsg.setContent(content);
 
-                List<String> phoneMSG = configService.findEmail(
-                        SysConfigConstant.Phone_username,
-                        SysConfigConstant.Phone_password);
+//                List<String> phoneMSG = configService.findEmail(
+//                        SysConfigConstant.Phone_username,
+//                        SysConfigConstant.Phone_password);
                 // h3235055,geagag11515gag2t2gaegaga 这是原来的用户名密码
                 try {
 

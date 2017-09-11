@@ -124,15 +124,15 @@ clientModule.controller('registerStepTwoCtrl',function($scope, $cookies, req, md
             return;
         }
         //订户才有
-        if( vm.applyCategory == '5' && form.contactPerson.$error.required){
-            layer.alert('请填写联系人');
-            return;
-        }
+//        if( vm.applyCategory == '5' && form.contactPerson.$error.required){
+//            layer.alert('请填写联系人');
+//            return;
+//        }
         //摄影师才有
-        if(vm.applyCategory == '3' && form.authorName.$error.required){
-            layer.alert('请填写作者名');
-            return;
-        }
+//        if(vm.applyCategory == '3' && form.authorName.$error.required){
+//            layer.alert('请填写作者名');
+//            return;
+//        }
         if(form.unitName.$error.required){
             layer.alert('请填写单位名称');
             return;
