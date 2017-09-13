@@ -1309,15 +1309,17 @@ public class ImgFileUtils {
         // case 1://小图
         // break;
         case 2:// 中图
-            sType = CommonConstant.MEDIUM;
+            sType = "small400";
             break;
-        case 3:// 1200中图
-            sType = CommonConstant.MEDIUM1200;
+        case 3:// 中图small400
+            sType = "medium";
             break;
-        case 4:// 大图
-            sType = CommonConstant.BIG;
+        case 4:// 1200中图
+            sType = "medium1200";
             break;
-
+        case 5:// 大图
+            sType = "big";
+            break;
         }
 
         if (SessionUtils.geLangType(request) == 1) {
