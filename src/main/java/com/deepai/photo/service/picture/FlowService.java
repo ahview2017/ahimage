@@ -634,7 +634,7 @@ public class FlowService {
                     
                     for(CpDutyUser duty : dutyUser){
                         //一审 
-                        if(duty.getType()==1){
+                        if(duty.getType()==1&&duty.getUserName().equals(user.getUserName())){
                             is1Shen = true;
                         }
                         //二审
