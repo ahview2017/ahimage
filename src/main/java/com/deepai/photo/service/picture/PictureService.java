@@ -39,6 +39,7 @@ import com.deepai.photo.mapper.CpPicGroupMapper;
 import com.deepai.photo.mapper.CpPictureMapper;
 import com.deepai.photo.mapper.OtherMapper;
 import com.deepai.photo.service.admin.SysConfigService;
+import com.deepai.photo.service.admin.UserRoleRightService;
 import com.drew.metadata.Directory;
 import com.drew.metadata.exif.ExifDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
@@ -75,15 +76,19 @@ public class PictureService {
 
     @Autowired
     private HttpServletRequest request;
+    
+    @Autowired
+    private UserRoleRightService rightService;
 
     /**
      * 上传图片，保存原图和小图
      * 
      * @param picFiles
      * @param siteId
+     * @param userId TODO
      * @throws Exception
      */
-    public List<CpPicture> uploadMorePic(MultipartFile[] picFiles, int siteId)
+    public List<CpPicture> uploadMorePic(MultipartFile[] picFiles, int siteId, Integer userId)
             throws Exception {
         List<CpPicture> res = new ArrayList<CpPicture>();
         // List<Map<String,Object>> res=new ArrayList<Map<String,Object>>();
@@ -104,7 +109,7 @@ public class PictureService {
             } else {
                 filename = getFileName("jpg");
             }
-            CpPicture pic = uploadOnePic(picFiles[i], filename, siteId);
+            CpPicture pic = uploadOnePic(picFiles[i], filename, siteId, userId);
             pic.setSmallPath(CommonConstant.SMALLHTTPPath
                     + ImgFileUtils.getSamllPathByName(filename, request));
             /*
@@ -195,13 +200,14 @@ public class PictureService {
      * 上传单张图，保存图片原图和小图
      * 
      * @param picFile
-     * @param oriPath
      * @param filename
      * @param siteId
+     * @param userId 用户ID（用于权限判断）
+     * @param oriPath
      * @throws Exception
      */
     public CpPicture uploadOnePic(MultipartFile picFile, String filename,
-            int siteId) throws Exception {
+            int siteId, Integer userId) throws Exception {
         // 原图存放路径
         String oriPath = sysConfigService.getDbSysConfig(
                 SysConfigConstant.DEFAULT_CLASSIFICATION_PATH, siteId);
@@ -263,6 +269,31 @@ public class PictureService {
             filename = filename.substring(0, filename.length() - 3) + "jpg";
         }
         File saveFile = new File(oriAllPath);
+        
+        // add by liu.jinfeng@20170914
+        if (!rightService.checkUserRight(userId, "uploadpic")) {
+
+            Directory EXIFInfo = ImageAnalyseUtil
+                    .extratEXIFFromFile(oriAllPath);
+            // 权限判断。如果没有设置权限的话不允许上传没有Exif信息的图片
+            // exif信息不存在时候给出提示信息（包括型号、快门、光圈、感光度、拍摄时间。同时没有时候不让保存）
+            if ((null == EXIFInfo) || (EXIFInfo
+                    .getString(ExifDirectory.TAG_MODEL) == null// 型号
+                    && EXIFInfo
+                            .getString(ExifDirectory.TAG_EXPOSURE_TIME) == null// 快门
+                    && EXIFInfo
+                            .getString(ExifDirectory.TAG_ISO_EQUIVALENT) == null// 感光度
+                    && EXIFInfo.getString(ExifDirectory.TAG_FNUMBER) == null// 光圈
+                    && EXIFInfo.getString(
+                            ExifDirectory.TAG_DATETIME_ORIGINAL) == null)) {// 时间
+                pic.setbIsExif(false);
+                return pic;
+            }
+        }
+        //其他情况设为true
+        pic.setbIsExif(true);
+        
+        
         // 上传图片大小限制
         String minM = sysConfigService
                 .getDbSysConfig(SysConfigConstant.PICTUREMINLENGTH, siteId);
@@ -326,6 +357,8 @@ public class PictureService {
             File oriFile = new File(oriAllPath);
             pic = loadInfoByIPTC(pic, oriFile);
         } catch (Exception iptce) {
+            //add by liu.jinfeng@20170914
+//            throw new Exception("上传图片包含非IPTC图片");
         }
         return pic;
     }
@@ -578,7 +611,7 @@ public class PictureService {
                     IPTCInfo.getString(IptcDirectory.TAG_WRITER));
             if (isnull) {
                 logger.info("图片没有可用的IPTC信息");
-                // throw new Exception("图片没有可用的IPTC信息");
+                 throw new Exception("图片没有可用的IPTC信息");
             }
             // 标题
             String strTitle = IPTCInfo.getString(IptcDirectory.TAG_HEADLINE);
@@ -624,7 +657,7 @@ public class PictureService {
             ap.setAuthorName(IPTCInfo.getString(IptcDirectory.TAG_WRITER));
         } catch (Exception e) {
             logger.info("上传图片包含非IPTC图片");
-            // throw new Exception("上传图片包含非IPTC图片，请重新选择图片上传");
+             throw new Exception("上传图片包含非IPTC图片，请重新选择图片上传");
         }
         return ap;
     }

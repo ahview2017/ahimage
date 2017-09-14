@@ -145,7 +145,8 @@ public class GroupPicController {
 				return result;
 			}
 			
-			List<CpPicture> resData=pictureService.uploadMorePic(picFiles,  SessionUtils.getSiteId(request));
+			CpUser user = SessionUtils.getUser(request);
+			List<CpPicture> resData=pictureService.uploadMorePic(picFiles,  SessionUtils.getSiteId(request), user.getId());
 			
 			result.setCode(CommonConstant.SUCCESSCODE);
 			result.setMsg(CommonConstant.SUCCESSSTRING);

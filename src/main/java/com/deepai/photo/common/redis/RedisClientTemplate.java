@@ -577,7 +577,10 @@ public class RedisClientTemplate {
 		}
 		boolean broken = false;
 		try {
-			result = shardedJedis.del(key);
+		  //add by xiayunan 2017-09-14
+            if(key!=null){
+                result = shardedJedis.del(key);
+            }
 
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

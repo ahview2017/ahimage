@@ -406,6 +406,7 @@ public class UserRoleRightService {
 		param.put("userId", userId);
 		param.put("rightUri", rightUri);
 		Integer c=cpBasicMapper.checkUserRight(param);
+		System.out.println("c==="+c);
 		return c!=null&&c>0?true:false;
 	}
 	
