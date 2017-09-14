@@ -168,6 +168,7 @@ public class LoginController {
             } else if (type == 1) {
                 scode = redisClientTemplate
                         .get("USERNAME" + userName + vilidate);
+                log.info("key:"+("USERNAME" + userName + vilidate)+";value:"+scode);
                 if(scode==null){
                     res.setCode(CommonConstant.EXCEPTIONCODE);
                     res.setMsg("验证码无效");
